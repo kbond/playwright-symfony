@@ -71,11 +71,12 @@ jobs:
         run: phpunit --testsuite=unit
 
   e2e-tests:
-    name: "E2E Tests (PHP ${{ matrix.php-version }})"
+    name: "E2E Tests (PHP ${{ matrix.php-version }}, deps ${{ matrix.with-deps }})"
     runs-on: ubuntu-latest
     strategy:
       matrix:
         php-version: ['8.4']
+        with-deps: ['auto', 'false']
       fail-fast: false
     steps:
       - name: "Git: checkout"
@@ -92,6 +93,7 @@ jobs:
         uses: playwright-php/setup-playwright@v1
         with:
           browsers: chromium
+          with-deps: ${{ matrix.with-deps }}
 
       - name: "Composer: install"
         run: composer install --prefer-dist --no-interaction --no-progress
